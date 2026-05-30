@@ -19,3 +19,5 @@
 ### run the project
 
 ## 4. course information
+
+This project was written as part of the [WIS python programming course](https://github.com/Code-Maven/wis-python-course-2026-03/)
