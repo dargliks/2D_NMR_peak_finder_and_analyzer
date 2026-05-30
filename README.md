@@ -12,7 +12,17 @@
 
 ### install this project
 
+To install the project, clone this repository: https://github.com/dargliks/2D_NMR_peak_finder_and_analyzer.git
+
 ### install dependencies 
+
+You will need the following dependencies to run this project:
+
+* nmrglue
+* numpy
+* scipy
+* matplotlib
+* PANDAS
 
 ### run tests
 
