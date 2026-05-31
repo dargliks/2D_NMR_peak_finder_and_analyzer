@@ -6,16 +6,27 @@ Therefore, every analysis of protein NMR data currently begins with adjusting th
 
 ## 1. what does this project do?
 
-This project is meant to 
+This project takes a 2D protein NMR spectrum and finds all the maximum points that are higher than a defined threshold (peaks). It then compares this list of peaks to the assigned peak list for the given protein, and will generate a new peak list in which the name of each peak from the assigned list is given to the spectrum peak that has the smallest distance from it. The system will flag for human discretion any peaks that are moved more than a determined threshold in this process, as well as possible cases where two assignments are moved to the same peak in the spectrum. 
 
-
-
+After aligning the assigned peaks to the spectrum, the project will integrate the volume under each peak and add the volume, as well as the peak height, to the peak list data. It can then run calculations comparing two such lists either in the locations of the peaks ("chemical shift perturbations") or in their relative intensity (calculated from peaks volume and/or height). 
 
 ## 2. input and output data
 
 ### expected inputs
 
+This project will require two main inputs:
+
+1. a 2D protein NMR spectrum - in the format of either Bruker, NMRPipe or Sparky.
+
+2. a text file containing a peak list - most likely in Sparky's list format, though other formats may be accepted as well. 
+
+The project may also require some manual input of parameters such as the acceptable thresholds for peak selection and for acceptable shift distance. 
+
 ### expected outputs
+
+The primary output expected is a text file containing the new adjusted and integrated peak list - most likely in Sparky's list format. 
+
+Further outputs may include CSV files containing the results of calculated comparisons between spectra, and PNG files plotting these calculations to the protein sequence. 
 
 ## 3. how to run this project?
 
@@ -25,7 +36,11 @@ To install the project, clone this repository: https://github.com/dargliks/2D_NM
 
 ### install dependencies 
 
-You will need the following dependencies to run this project:
+You can install the required dependencies using:
+
+    pip install -r requirements.txt
+
+This project requires the following packages to run:
 
 * nmrglue
 * numpy
@@ -35,7 +50,13 @@ You will need the following dependencies to run this project:
 
 ### run tests
 
+The project will include automated tests for core logic. run them with
+    pytest tests\
+
 ### run the project
+
+run this project using
+    python PeakFinder_main.py
 
 ## 4. course information
 
