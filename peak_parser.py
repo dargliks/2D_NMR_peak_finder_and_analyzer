@@ -1,6 +1,7 @@
 from peak import Peak
 
 def load_peaks(file_path):
+    col_map = None
     peaks = []
     
     with open(file_path, "r") as f:
@@ -13,6 +14,7 @@ def load_peaks(file_path):
             continue
 
         parts = line.split()
+        parts = [p for p in parts if p.lower() != "ga"]
 
         # detect header
         if parts[0].lower() == "assignment":
@@ -34,19 +36,38 @@ def load_peaks(file_path):
                 i += 1
 
             col_map = {}
-
             for i, name in enumerate(normalized_header):
                 col_map[name] = i
             
-            print(col_map)
+            continue
+
+        if col_map is None:
+            continue
+        if len(parts) < len(col_map):
             continue
 
         assignment = parts[col_map["assignment"]]
         w1 = float(parts[col_map["w1"]])
         w2 = float(parts[col_map["w2"]])
+        
+        volume = None
+        if "volume" in col_map:
+            volume = float(parts[col_map["volume"]])
 
-        peak = Peak(assignment, w1, w2)
-        print(peak)
+        data_height = None
+        if "data_height" in col_map:
+            data_height = float(parts[col_map["data_height"]])
+
+        peak = Peak(
+            assignment=assignment,
+            w1=w1,
+            w2=w2,
+            volume=volume,
+            data_height=data_height
+        )
+        
+        peaks.append(peak)
+    return peaks
 
 load_peaks("example_file_1.list")
 
