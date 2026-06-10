@@ -1,5 +1,7 @@
 import numpy as np
 from spectrum import Spectrum
+from peak import Peak
+from alignment_engine import align_peak
 
 
 def main():
@@ -50,7 +52,50 @@ def main():
 
     print("Region w2 axis:")
     print(region.w2_axis)
+    
+    peak = Peak(
+        assignment="2ALAN-H",
+        w1=9.2,
+        w2=2.1,
+        volume=None,
+        data_height=None
+    )
 
+    aligned_peak = align_peak(peak, spectrum)
+
+    print("Original peak:", peak)
+    print("Aligned peak:", aligned_peak)
+
+    test_peaks = [
+        Peak(
+            assignment="TEST1",
+            w1=8.0,
+            w2=3.0,
+            volume=None,
+            data_height=None,
+        ),
+        Peak(
+            assignment="TEST2",
+            w1=8.1,
+            w2=2.9,
+            volume=None,
+            data_height=None,
+        ),
+        Peak(
+            assignment="TEST3",
+            w1=9.0,
+            w2=2.0,
+            volume=None,
+            data_height=None,
+        ),
+    ]
+
+    for peak in test_peaks:
+        aligned_peak = align_peak(peak, spectrum)
+
+        print()
+        print("Original:", peak)
+        print("Aligned :", aligned_peak)
 
 if __name__ == "__main__":
     main()
