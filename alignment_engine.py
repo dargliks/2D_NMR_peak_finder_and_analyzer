@@ -2,15 +2,17 @@ import numpy as np
 from dataclasses import replace
 from spectrum import Spectrum
 from peak import Peak
+from alignment_config import AlignmentConfig
 
-def align_peak(peak: Peak, spectrum: Spectrum) -> Peak:
 
+def _align_once(peak: Peak, spectrum: Spectrum, config: AlignmentConfig,) -> Peak:
+    
     # 1. Extract local region around the peak
     region = spectrum.extract_region(
         center_w1=peak.w1,
         center_w2=peak.w2,
-        radius_w1=0.2,
-        radius_w2=0.2,
+        radius_w1=config.radius_w1,
+        radius_w2=config.radius_w2,
     )
 
     # 2. Find index of strongest intensity in the region
@@ -37,3 +39,26 @@ def align_peak(peak: Peak, spectrum: Spectrum) -> Peak:
         data_height=new_data_height,
         volume=None,   
     )
+
+
+def align_peak(peak: Peak, spectrum: Spectrum, config: AlignmentConfig) -> Peak:
+
+    current_peak = peak
+
+    for _ in range(config.max_iterations):
+
+        new_peak = _align_once(
+            current_peak,
+            spectrum,
+            config,
+        )
+
+        if (
+            new_peak.w1 == current_peak.w1
+            and new_peak.w2 == current_peak.w2
+        ):
+            return new_peak
+
+        current_peak = new_peak
+
+    return current_peak  

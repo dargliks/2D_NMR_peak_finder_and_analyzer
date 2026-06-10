@@ -2,6 +2,7 @@ import numpy as np
 from spectrum import Spectrum
 from peak import Peak
 from alignment_engine import align_peak
+from alignment_config import AlignmentConfig
 
 
 def main():
@@ -61,7 +62,13 @@ def main():
         data_height=None
     )
 
-    aligned_peak = align_peak(peak, spectrum)
+    config = AlignmentConfig(
+        radius_w1=0.2,
+        radius_w2=0.2,
+        max_iterations=3
+    )
+    
+    aligned_peak = align_peak(peak, spectrum, config)
 
     print("Original peak:", peak)
     print("Aligned peak:", aligned_peak)
@@ -91,7 +98,7 @@ def main():
     ]
 
     for peak in test_peaks:
-        aligned_peak = align_peak(peak, spectrum)
+        aligned_peak = align_peak(peak, spectrum, config)
 
         print()
         print("Original:", peak)

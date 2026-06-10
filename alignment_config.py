@@ -5,3 +5,5 @@ from dataclasses import dataclass
 class AlignmentConfig:
     radius_w1: float
     radius_w2: float
+    max_iterations: int
+    
