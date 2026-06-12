@@ -3,6 +3,7 @@ from spectrum import Spectrum
 from peak import Peak
 from alignment_engine import align_peak
 from alignment_config import AlignmentConfig
+from spectrum_loader import load_ucsf
 
 
 def main():
@@ -17,7 +18,9 @@ def main():
     spectrum = Spectrum(
         intensities=intensities,
         w1_axis=w1_axis,
-        w2_axis=w2_axis
+        w2_axis=w2_axis,
+        w1_nucleus="15N",
+        w2_nucleus="1H",
     )
 
     print("Spectrum created successfully!")
@@ -103,6 +106,17 @@ def main():
         print()
         print("Original:", peak)
         print("Aligned :", aligned_peak)
+
+
+    spectrum = load_ucsf("example_spectrum.ucsf")
+
+    print("Loaded spectrum successfully!")
+    print(spectrum)
+
+    print()
+    print(spectrum.intensities.shape)
+    print(len(spectrum.w1_axis), len(spectrum.w2_axis))
+    print(spectrum.w1_nucleus, spectrum.w2_nucleus)
 
 if __name__ == "__main__":
     main()

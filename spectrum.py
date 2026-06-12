@@ -6,6 +6,8 @@ class Spectrum:
     intensities: np.ndarray
     w1_axis: np.ndarray
     w2_axis: np.ndarray
+    w1_nucleus: str
+    w2_nucleus: str
 
     def ppm_to_index(self, w1_ppm: float, w2_ppm: float) -> tuple[int, int]:
         w1_idx = int(np.argmin(np.abs(self.w1_axis - w1_ppm)))
@@ -55,4 +57,6 @@ class Spectrum:
             intensities=region_intensities,
             w1_axis=region_w1_axis,
             w2_axis=region_w2_axis,
+            w1_nucleus=self.w1_nucleus,
+            w2_nucleus=self.w2_nucleus,
         )
