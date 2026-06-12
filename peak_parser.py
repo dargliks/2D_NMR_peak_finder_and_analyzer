@@ -69,6 +69,5 @@ def load_peaks(file_path):
         peaks.append(peak)
     return peaks
 
-load_peaks("example_file_1.list")
 
 

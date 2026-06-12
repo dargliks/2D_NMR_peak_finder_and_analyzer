@@ -4,6 +4,7 @@ from peak import Peak
 from alignment_engine import align_peak
 from alignment_config import AlignmentConfig
 from spectrum_loader import load_ucsf
+from peak_parser import load_peaks
 
 
 def main():
@@ -108,15 +109,55 @@ def main():
         print("Aligned :", aligned_peak)
 
 
-    spectrum = load_ucsf("example_spectrum.ucsf")
-
-    print("Loaded spectrum successfully!")
-    print(spectrum)
+    real_spectrum = load_ucsf("example_spectrum.ucsf")
 
     print()
-    print(spectrum.intensities.shape)
-    print(len(spectrum.w1_axis), len(spectrum.w2_axis))
-    print(spectrum.w1_nucleus, spectrum.w2_nucleus)
+    print("Loaded spectrum successfully!")
+    print(real_spectrum.intensities.shape)
+    print(real_spectrum.w1_nucleus, real_spectrum.w2_nucleus)
+
+    print()
+    peaks = load_peaks("example_file_1.list")
+    print(f"Loaded {len(peaks)} peaks.")
+    print("First peak:", peaks[0])
+
+    first_peak = peaks[0]
+
+    aligned_peak = align_peak(
+        peak=first_peak,
+        spectrum=real_spectrum,
+        config=config,
+    )
+
+    print()
+    print("Original peak:")
+    print(first_peak)
+
+    print("Aligned peak:")
+    print(aligned_peak)
+
+    original_i, original_j = real_spectrum.ppm_to_index(
+        first_peak.w1,
+        first_peak.w2,
+    )
+
+    aligned_i, aligned_j = real_spectrum.ppm_to_index(
+        aligned_peak.w1,
+        aligned_peak.w2,
+    )
+
+    print("Original indices:", original_i, original_j)
+    print("Aligned indices :", aligned_i, aligned_j)
+    print(
+        "Pixel movement:",
+        aligned_i - original_i,
+        aligned_j - original_j,
+    )
+
+
+
+
+
 
 if __name__ == "__main__":
     main()
