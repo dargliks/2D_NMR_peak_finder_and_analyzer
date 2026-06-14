@@ -5,6 +5,7 @@ from alignment_engine import align_peak
 from alignment_config import AlignmentConfig
 from spectrum_loader import load_ucsf
 from peak_parser import load_peaks
+from dev_tools.visualize_alignment import visualize_alignment
 
 
 def main():
@@ -121,38 +122,53 @@ def main():
     print(f"Loaded {len(peaks)} peaks.")
     print("First peak:", peaks[0])
 
-    first_peak = peaks[0]
+    test_indices = [0, 8, 11, 22, 41]
 
-    aligned_peak = align_peak(
-        peak=first_peak,
-        spectrum=real_spectrum,
-        config=config,
-    )
+    for Index in test_indices:
+        peak=peaks[Index]
+        
+        aligned_peak = align_peak(
+            peak=peak,
+            spectrum=real_spectrum,
+            config=config,   
+        )
 
-    print()
-    print("Original peak:")
-    print(first_peak)
+        print()
+        print(f"Peak #{Index}: {peak.assignment}")
 
-    print("Aligned peak:")
-    print(aligned_peak)
+        print("Original:")
+        print(peak)
 
-    original_i, original_j = real_spectrum.ppm_to_index(
-        first_peak.w1,
-        first_peak.w2,
-    )
+        print("Aligned:")
+        print(aligned_peak)
 
-    aligned_i, aligned_j = real_spectrum.ppm_to_index(
-        aligned_peak.w1,
-        aligned_peak.w2,
-    )
+        visualize_alignment(
+            spectrum=real_spectrum,
+            original_peak=peak,
+            aligned_peak=aligned_peak,
+            alignment_config=config,
+            plot_radius_w1=0.4,
+            plot_radius_w2=0.4,
+        )
 
-    print("Original indices:", original_i, original_j)
-    print("Aligned indices :", aligned_i, aligned_j)
-    print(
-        "Pixel movement:",
-        aligned_i - original_i,
-        aligned_j - original_j,
-    )
+
+        # original_i, original_j = real_spectrum.ppm_to_index(
+        #     first_peak.w1,
+        #     first_peak.w2,
+        # )
+
+        # aligned_i, aligned_j = real_spectrum.ppm_to_index(
+        #     aligned_peak.w1,
+        #     aligned_peak.w2,
+        # )
+
+        # print("Original indices:", original_i, original_j)
+        # print("Aligned indices :", aligned_i, aligned_j)
+        # print(
+        #     "Pixel movement:",
+        #     aligned_i - original_i,
+        #     aligned_j - original_j,
+        # )
 
 
 
