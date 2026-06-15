@@ -3,6 +3,7 @@ from dataclasses import replace
 from spectrum import Spectrum
 from peak import Peak
 from alignment_config import AlignmentConfig
+from alignment_result import AlignmentResult
 
 
 def _align_once(peak: Peak, spectrum: Spectrum, config: AlignmentConfig,) -> Peak:
@@ -41,11 +42,11 @@ def _align_once(peak: Peak, spectrum: Spectrum, config: AlignmentConfig,) -> Pea
     )
 
 
-def align_peak(peak: Peak, spectrum: Spectrum, config: AlignmentConfig) -> Peak:
+def align_peak(peak: Peak, spectrum: Spectrum, config: AlignmentConfig) -> AlignmentResult:
 
     current_peak = peak
 
-    for _ in range(config.max_iterations):
+    for i in range(config.max_iterations):
 
         new_peak = _align_once(
             current_peak,
@@ -57,8 +58,15 @@ def align_peak(peak: Peak, spectrum: Spectrum, config: AlignmentConfig) -> Peak:
             new_peak.w1 == current_peak.w1
             and new_peak.w2 == current_peak.w2
         ):
-            return new_peak
-
+            print ("iteration count:", i)
+            return AlignmentResult(
+                peak=new_peak,
+                status="CONVERGED"
+            )
+            
         current_peak = new_peak
 
-    return current_peak  
+    return AlignmentResult(
+        peak=current_peak,
+        status="FAILED_TO_CONVERGE"
+    )

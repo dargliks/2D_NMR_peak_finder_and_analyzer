@@ -46,6 +46,23 @@ class Spectrum:
             & (self.w2_axis <= upper_w2)
         )
 
+        min_size_w1 = 5
+        min_size_w2 = 5
+
+        if np.sum(w1_mask) < min_size_w1:
+            raise ValueError(
+                f"The selected w1 search radius ({radius_w1} ppm) "
+                f"contains only {np.sum(w1_mask)} data points. "
+                f"Please increase the search radius."
+            )
+
+        if np.sum(w2_mask) < min_size_w2:
+            raise ValueError(
+                f"The selected w2 search radius ({radius_w2} ppm) "
+                f"contains only {np.sum(w2_mask)} data points. "
+                f"Please increase the search radius."
+            )
+
         region_intensities = self.intensities[
             np.ix_(w1_mask, w2_mask)
         ]

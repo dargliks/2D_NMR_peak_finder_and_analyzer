@@ -43,21 +43,21 @@ def main():
 
     print("PPM coordinates:", w1_ppm, w2_ppm)
 
-    region = spectrum.extract_region(
-        center_w1=9.0,
-        center_w2=2.0,
-        radius_w1=0.2,
-        radius_w2=0.2,
-    )
+    # region = spectrum.extract_region(
+    #      center_w1=9.0,
+    #      center_w2=2.0,
+    #      radius_w1=0.2,
+    #      radius_w2=0.2,
+    #)
 
-    print("Region intensities:")
-    print(region.intensities)
+    # print("Region intensities:")
+    # print(region.intensities)
 
-    print("Region w1 axis:")
-    print(region.w1_axis)
+    # print("Region w1 axis:")
+    # print(region.w1_axis)
 
-    print("Region w2 axis:")
-    print(region.w2_axis)
+    # print("Region w2 axis:")
+    # print(region.w2_axis)
     
     peak = Peak(
         assignment="2ALAN-H",
@@ -69,45 +69,47 @@ def main():
 
     config = AlignmentConfig(
         radius_w1=0.2,
-        radius_w2=0.2,
+        radius_w2=0.02,
         max_iterations=3
     )
     
-    aligned_peak = align_peak(peak, spectrum, config)
+    # alignment_result = align_peak(peak, spectrum, config)
+    # aligned_peak = alignment_result.peak
 
-    print("Original peak:", peak)
-    print("Aligned peak:", aligned_peak)
+    # print("Original peak:", peak)
+    # print("Aligned peak:", aligned_peak)
 
-    test_peaks = [
-        Peak(
-            assignment="TEST1",
-            w1=8.0,
-            w2=3.0,
-            volume=None,
-            data_height=None,
-        ),
-        Peak(
-            assignment="TEST2",
-            w1=8.1,
-            w2=2.9,
-            volume=None,
-            data_height=None,
-        ),
-        Peak(
-            assignment="TEST3",
-            w1=9.0,
-            w2=2.0,
-            volume=None,
-            data_height=None,
-        ),
-    ]
+    # test_peaks = [
+    #     Peak(
+    #         assignment="TEST1",
+    #         w1=8.0,
+    #         w2=3.0,
+    #         volume=None,
+    #         data_height=None,
+    #     ),
+    #     Peak(
+    #         assignment="TEST2",
+    #         w1=8.1,
+    #         w2=2.9,
+    #         volume=None,
+    #         data_height=None,
+    #     ),
+    #     Peak(
+    #         assignment="TEST3",
+    #         w1=9.0,
+    #         w2=2.0,
+    #         volume=None,
+    #         data_height=None,
+    #     ),
+    # ]
 
-    for peak in test_peaks:
-        aligned_peak = align_peak(peak, spectrum, config)
+    # for peak in test_peaks:
+    #     alignment_result = align_peak(peak, spectrum, config)
+    #     aligned_peak = alignment_result.peak
 
-        print()
-        print("Original:", peak)
-        print("Aligned :", aligned_peak)
+    #     print()
+    #     print("Original:", peak)
+    #     print("Aligned :", aligned_peak)
 
 
     real_spectrum = load_ucsf("example_spectrum.ucsf")
@@ -122,45 +124,88 @@ def main():
     print(f"Loaded {len(peaks)} peaks.")
     print("First peak:", peaks[0])
 
-    # test_indices = [0, 8, 11, 22, 41]
+    test_indices = [0, 8, 11, 22, 32, 41]
 
-    # for Index in test_indices:
-    #     peak=peaks[Index]
+    for Index in test_indices:
+        peak=peaks[Index]
         
-    #     aligned_peak = align_peak(
-    #         peak=peak,
-    #         spectrum=real_spectrum,
-    #         config=config,   
-    #     )
+        alignment_result = align_peak(
+            peak=peak,
+            spectrum=real_spectrum,
+            config=config,   
+        )
+        aligned_peak = alignment_result.peak
 
-    #     print()
-    #     print(f"Peak #{Index}: {peak.assignment}")
+        print()
+        print(f"Peak #{Index}: {peak.assignment}")
 
-    #     print("Original:")
-    #     print(peak)
+        #print(region.intensities.shape)
 
-    #     print("Aligned:")
-    #     print(aligned_peak)
+        print("Original:")
+        print(peak)
 
-    #     visualize_alignment(
-    #         spectrum=real_spectrum,
-    #         original_peak=peak,
-    #         aligned_peak=aligned_peak,
-    #         alignment_config=config,
-    #         plot_radius_w1=0.4,
-    #         plot_radius_w2=0.4,
-    #     )
+        print("Aligned:")
+        print(aligned_peak)
 
-    original_first_w1 = real_spectrum.w1_axis[0]
-    original_first_w2 = real_spectrum.w2_axis[0]
-    real_spectrum.apply_shift (
-        w1_shift = 0.5,
-        w2_shift = -0.03,
-    )
+        visualize_alignment(
+            spectrum=real_spectrum,
+            original_peak=peak,
+            aligned_peak=aligned_peak,
+            alignment_config=config,
+            plot_radius_w1=0.8,
+            plot_radius_w2=0.4,
+        )
 
-    assert real_spectrum.w1_axis[0] == original_first_w1 + 0.5
-    assert real_spectrum.w2_axis[0] == original_first_w2 - 0.03
-    print("Shift test passed!")
+    # original_first_w1 = real_spectrum.w1_axis[0]
+    # original_first_w2 = real_spectrum.w2_axis[0]
+    # real_spectrum.apply_shift (
+    #     w1_shift = 0.5,
+    #     w2_shift = -0.03,
+    # )
+
+    # assert real_spectrum.w1_axis[0] == original_first_w1 + 0.5
+    # assert real_spectrum.w2_axis[0] == original_first_w2 - 0.03
+    # print("Shift test passed!")
+
+    peaks = load_peaks("example_file_2.list")
+    
+    for peak in peaks:
+        original_w1 = peak.w1
+        oringinal_w2 = peak.w2
+        result=align_peak(peak=peak,
+            spectrum=real_spectrum,
+            config=config,   
+        )
+
+        print(result.peak.assignment) 
+        print("original peak:", original_w1, oringinal_w2)
+        print("aligned peak:", result.peak.w1, result.peak.w2) 
+        print(result.status)
+        print()
+
+    for Index in test_indices:
+    
+        peak=peaks[Index]
+            
+        alignment_result = align_peak(
+            peak=peak,
+            spectrum=real_spectrum,
+            config=config,   
+        )
+        aligned_peak = alignment_result.peak
+        visualize_alignment(
+            spectrum=real_spectrum,
+            original_peak=peak,
+            aligned_peak=aligned_peak,
+            alignment_config=config,
+            plot_radius_w1=0.8,
+            plot_radius_w2=0.4,
+        )
+
+
+
+        
+
 
 
 
