@@ -122,54 +122,45 @@ def main():
     print(f"Loaded {len(peaks)} peaks.")
     print("First peak:", peaks[0])
 
-    test_indices = [0, 8, 11, 22, 41]
+    # test_indices = [0, 8, 11, 22, 41]
 
-    for Index in test_indices:
-        peak=peaks[Index]
+    # for Index in test_indices:
+    #     peak=peaks[Index]
         
-        aligned_peak = align_peak(
-            peak=peak,
-            spectrum=real_spectrum,
-            config=config,   
-        )
+    #     aligned_peak = align_peak(
+    #         peak=peak,
+    #         spectrum=real_spectrum,
+    #         config=config,   
+    #     )
 
-        print()
-        print(f"Peak #{Index}: {peak.assignment}")
+    #     print()
+    #     print(f"Peak #{Index}: {peak.assignment}")
 
-        print("Original:")
-        print(peak)
+    #     print("Original:")
+    #     print(peak)
 
-        print("Aligned:")
-        print(aligned_peak)
+    #     print("Aligned:")
+    #     print(aligned_peak)
 
-        visualize_alignment(
-            spectrum=real_spectrum,
-            original_peak=peak,
-            aligned_peak=aligned_peak,
-            alignment_config=config,
-            plot_radius_w1=0.4,
-            plot_radius_w2=0.4,
-        )
+    #     visualize_alignment(
+    #         spectrum=real_spectrum,
+    #         original_peak=peak,
+    #         aligned_peak=aligned_peak,
+    #         alignment_config=config,
+    #         plot_radius_w1=0.4,
+    #         plot_radius_w2=0.4,
+    #     )
 
+    original_first_w1 = real_spectrum.w1_axis[0]
+    original_first_w2 = real_spectrum.w2_axis[0]
+    real_spectrum.apply_shift (
+        w1_shift = 0.5,
+        w2_shift = -0.03,
+    )
 
-        # original_i, original_j = real_spectrum.ppm_to_index(
-        #     first_peak.w1,
-        #     first_peak.w2,
-        # )
-
-        # aligned_i, aligned_j = real_spectrum.ppm_to_index(
-        #     aligned_peak.w1,
-        #     aligned_peak.w2,
-        # )
-
-        # print("Original indices:", original_i, original_j)
-        # print("Aligned indices :", aligned_i, aligned_j)
-        # print(
-        #     "Pixel movement:",
-        #     aligned_i - original_i,
-        #     aligned_j - original_j,
-        # )
-
+    assert real_spectrum.w1_axis[0] == original_first_w1 + 0.5
+    assert real_spectrum.w2_axis[0] == original_first_w2 - 0.03
+    print("Shift test passed!")
 
 
 

@@ -60,3 +60,11 @@ class Spectrum:
             w1_nucleus=self.w1_nucleus,
             w2_nucleus=self.w2_nucleus,
         )
+    
+    def apply_shift(
+        self,
+        w1_shift,
+        w2_shift,
+    ):
+        self.w1_axis += w1_shift
+        self.w2_axis += w2_shift
