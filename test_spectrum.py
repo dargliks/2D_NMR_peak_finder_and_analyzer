@@ -168,6 +168,9 @@ def main():
     # print("Shift test passed!")
 
     peaks = load_peaks("example_file_2.list")
+
+    for peak in peaks:
+        print (peak.assignment)
     
     for peak in peaks:
         original_w1 = peak.w1
