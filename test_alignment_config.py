@@ -6,6 +6,7 @@ def main():
         radius_w1=0.2,
         radius_w2=0.2,
         max_iterations=3,
+        minimum_peak_intensity=5000
     )
 
     print(config)

@@ -44,6 +44,7 @@ def _align_once(peak: Peak, spectrum: Spectrum, config: AlignmentConfig,) -> Pea
 
 def align_peak(peak: Peak, spectrum: Spectrum, config: AlignmentConfig) -> AlignmentResult:
 
+    original_peak = peak
     current_peak = peak
 
     for i in range(config.max_iterations):
@@ -58,15 +59,24 @@ def align_peak(peak: Peak, spectrum: Spectrum, config: AlignmentConfig) -> Align
             new_peak.w1 == current_peak.w1
             and new_peak.w2 == current_peak.w2
         ):
-            print ("iteration count:", i)
-            return AlignmentResult(
-                peak=new_peak,
-                status="CONVERGED"
-            )
+            if (new_peak.data_height < config.minimum_peak_intensity):
+                return AlignmentResult(
+                    original_peak=original_peak,
+                    aligned_peak=new_peak, 
+                    status="LOW_SIGNAL"
+                )
+                
+            else:
+                return AlignmentResult(
+                    original_peak=original_peak,
+                    aligned_peak=new_peak,
+                    status="CONVERGED"
+                )
             
         current_peak = new_peak
 
     return AlignmentResult(
-        peak=current_peak,
+        original_peak=original_peak,
+        aligned_peak=current_peak,
         status="FAILED_TO_CONVERGE"
     )

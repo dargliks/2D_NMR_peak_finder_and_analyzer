@@ -6,6 +6,8 @@ from alignment_config import AlignmentConfig
 from spectrum_loader import load_ucsf
 from peak_parser import load_peaks
 from dev_tools.visualize_alignment import visualize_alignment
+from collision_detector import detect_collisions
+from output_writer import write_sparky, write_report
 
 
 def main():
@@ -70,7 +72,8 @@ def main():
     config = AlignmentConfig(
         radius_w1=0.2,
         radius_w2=0.02,
-        max_iterations=3
+        max_iterations=3,
+        minimum_peak_intensity=1e11,
     )
     
     # alignment_result = align_peak(peak, spectrum, config)
@@ -124,7 +127,7 @@ def main():
     print(f"Loaded {len(peaks)} peaks.")
     print("First peak:", peaks[0])
 
-    test_indices = [0, 8, 11, 22, 32, 41]
+    test_indices = [0, 8, 11, 22, 41]
 
     for Index in test_indices:
         peak=peaks[Index]
@@ -134,7 +137,7 @@ def main():
             spectrum=real_spectrum,
             config=config,   
         )
-        aligned_peak = alignment_result.peak
+        aligned_peak = alignment_result.aligned_peak
 
         print()
         print(f"Peak #{Index}: {peak.assignment}")
@@ -168,9 +171,7 @@ def main():
     # print("Shift test passed!")
 
     peaks = load_peaks("example_file_2.list")
-
-    for peak in peaks:
-        print (peak.assignment)
+    results = []
     
     for peak in peaks:
         original_w1 = peak.w1
@@ -180,12 +181,16 @@ def main():
             config=config,   
         )
 
-        print(result.peak.assignment) 
-        print("original peak:", original_w1, oringinal_w2)
-        print("aligned peak:", result.peak.w1, result.peak.w2) 
+        results.append(result)
+
+        print(result.aligned_peak.assignment) 
+        print("original peak:", result.original_peak.w1, result.original_peak.w2)
+        print("aligned peak:", result.aligned_peak.w1, result.aligned_peak.w2) 
         print(result.status)
         print()
 
+    test_indices = [0, 32, 34, 37]
+    
     for Index in test_indices:
     
         peak=peaks[Index]
@@ -195,7 +200,7 @@ def main():
             spectrum=real_spectrum,
             config=config,   
         )
-        aligned_peak = alignment_result.peak
+        aligned_peak = alignment_result.aligned_peak
         visualize_alignment(
             spectrum=real_spectrum,
             original_peak=peak,
@@ -204,6 +209,20 @@ def main():
             plot_radius_w1=0.8,
             plot_radius_w2=0.4,
         )
+    
+    detect_collisions(results)
+
+    write_sparky(
+        results=results,
+        filepath="aligned_peaks.list",
+    )
+
+    write_report(
+        results=results,
+        filepath="alignment_report.csv"
+    )
+
+    
 
 
 
