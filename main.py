@@ -83,11 +83,47 @@ def main():
         )
 
         results.append(result)
+
+    converged=0
+    low=0
+    failed=0
+
+    for result in results:
+        if result.status == "CONVERGED":
+            converged += 1
+
+        elif result.status == "LOW_SIGNAL":
+            low += 1
+        
+        elif result.status == "FAILED_TO_CONVERGE":
+            failed += 1
     
     detect_collisions(results)
 
+    collision_count = 0
+    for result in results:
+        if result.collision_with:
+            collision_count += 1
+    
+
+
     write_sparky(results, "aligned_peaks.list")
     write_report(results, "alignment_report.csv")
+
+    print("Alignment complete.")
+    print()
+    print(f"{len(results)} peaks processed.")
+    print()
+    print("Status summary:")
+    print(f"CONVERGED:            {converged}")
+    print(f"LOW_SIGNAL:           {low}")
+    print(f"FAILED_TO_CONVERGE:   {failed}")
+    print()
+    print(f"{collision_count} peaks involved in collisions.")
+    print()
+    print("Output files written.")
+
+
     
 
 
