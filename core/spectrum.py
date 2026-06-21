@@ -1,8 +1,20 @@
+"""
+Core data structure representing a 2D NMR spectrum and providing
+utilities for coordinate conversion, intensity lookup, region extraction,
+and global axis shifting.
+"""
+
 from dataclasses import dataclass
 import numpy as np
 
+
 @dataclass
 class Spectrum:
+    """
+    Represents a 2D NMR spectrum including intensity data and chemical shift axes.
+    Provides utilities for converting between ppm and index space, extracting
+    regions, and applying global spectral shifts.
+    """
     intensities: np.ndarray
     w1_axis: np.ndarray
     w2_axis: np.ndarray
@@ -46,8 +58,8 @@ class Spectrum:
             & (self.w2_axis <= upper_w2)
         )
 
-        min_size_w1 = 5
-        min_size_w2 = 5
+        min_size_w1 = 5  # minimum number of points required for valid region
+        min_size_w2 = 5  # minimum number of points required for valid region
 
         if np.sum(w1_mask) < min_size_w1:
             raise ValueError(
@@ -85,3 +97,4 @@ class Spectrum:
     ):
         self.w1_axis += w1_shift
         self.w2_axis += w2_shift
+        # Applies global shift in-place (original spectrum is not preserved in V1 design)
