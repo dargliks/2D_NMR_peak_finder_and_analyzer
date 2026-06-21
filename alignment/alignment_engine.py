@@ -1,9 +1,9 @@
 import numpy as np
 from dataclasses import replace
-from spectrum import Spectrum
-from peak import Peak
-from alignment_config import AlignmentConfig
-from alignment_result import AlignmentResult
+from core.spectrum import Spectrum
+from core.peak import Peak
+from core.alignment_config import AlignmentConfig
+from core.alignment_result import AlignmentResult
 
 
 def _align_once(peak: Peak, spectrum: Spectrum, config: AlignmentConfig,) -> Peak:

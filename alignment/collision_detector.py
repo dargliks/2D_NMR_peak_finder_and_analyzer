@@ -1,5 +1,5 @@
 import numpy as np
-from alignment_result import AlignmentResult
+from core.alignment_result import AlignmentResult
 
 def detect_collisions(results) -> None:
     for i in range(len(results)):

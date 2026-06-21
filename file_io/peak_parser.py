@@ -1,4 +1,4 @@
-from peak import Peak
+from core.peak import Peak
 
 def load_peaks(file_path):
     col_map = None

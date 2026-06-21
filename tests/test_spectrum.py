@@ -1,13 +1,13 @@
 import numpy as np
-from spectrum import Spectrum
-from peak import Peak
-from alignment_engine import align_peak
-from alignment_config import AlignmentConfig
-from spectrum_loader import load_ucsf
-from peak_parser import load_peaks
+from core.spectrum import Spectrum
+from core.peak import Peak
+from alignment.alignment_engine import align_peak
+from core.alignment_config import AlignmentConfig
+from file_io.spectrum_loader import load_ucsf
+from file_io.peak_parser import load_peaks
 from dev_tools.visualize_alignment import visualize_alignment
-from collision_detector import detect_collisions
-from output_writer import write_sparky, write_report
+from alignment.collision_detector import detect_collisions
+from file_io.output_writer import write_sparky, write_report
 
 
 def main():

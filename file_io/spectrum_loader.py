@@ -1,5 +1,5 @@
 import nmrglue as ng
-from spectrum import Spectrum
+from core.spectrum import Spectrum
 
 def load_ucsf(filename: str) -> Spectrum:
     dic, data = ng.sparky.read(filename)

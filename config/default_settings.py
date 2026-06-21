@@ -1,4 +1,4 @@
-from alignment_config import AlignmentConfig
+from core.alignment_config import AlignmentConfig
 
 def get_default_config(spectrum):
     if (

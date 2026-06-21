@@ -1,4 +1,4 @@
-from peak_parser import get_column_positions, build_columns_from_header, parse_peak_line
+from file_io.peak_parser import get_column_positions, build_columns_from_header, parse_peak_line
 
 example_header = "      Assignment         w1         w2        Volume   Data Height "
 

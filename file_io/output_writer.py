@@ -1,4 +1,4 @@
-from alignment_result import AlignmentResult
+from core.alignment_result import AlignmentResult
 
 def write_sparky (results, filepath):
     with open (filepath, "w") as f:

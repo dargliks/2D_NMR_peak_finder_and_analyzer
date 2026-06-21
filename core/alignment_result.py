@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from peak import Peak
+from core.peak import Peak
 
 @dataclass
 class AlignmentResult:

@@ -1,4 +1,4 @@
-from peak import Peak
+from core.peak import Peak
 
 test_peak = Peak(
     assignment="2ALAN-H",
