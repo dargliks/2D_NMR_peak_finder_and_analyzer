@@ -1,6 +1,14 @@
+"""
+Loads SPARKY peak lists into Peak objects.
+"""
+
 from core.peak import Peak
 
-def load_peaks(file_path):
+
+def load_peaks(file_path: str) -> list[Peak]:
+    """
+    Loads a SPARKY peak list and returns a list of Peak objects.
+    """
     col_map = None
     peaks = []
     
@@ -14,9 +22,9 @@ def load_peaks(file_path):
             continue
 
         parts = line.split()
-        parts = [p for p in parts if p.lower() != "ga"]
+        parts = [p for p in parts if p.lower() != "ga"]  # Remove Sparky's optional "ga" annotation column.
 
-        # detect header
+        # Detect header
         if parts[0].lower() == "assignment":
             header = parts
             normalized_header = []
@@ -58,19 +66,13 @@ def load_peaks(file_path):
         if actual == expected:
             volume = float(parts[col_map["volume"]]) if "volume" in col_map else None
             data_height = float(parts[col_map["data_height"]]) if "data_height" in col_map else None
+
         elif actual == expected - 1:
+            # Handle rows in a peak list that omit the optional Volume column.
             volume = None
-            data_height = float(parts[col_map["data_height"] -1]) if "data_height" in col_map else None
+            data_height = float(parts[col_map["data_height"] - 1]) if "data_height" in col_map else None
         else:
             continue
-
-        # volume = None
-        # if "volume" in col_map:
-        #     volume = float(parts[col_map["volume"]])
-
-        # data_height = None
-        # if "data_height" in col_map:
-        #     data_height = float(parts[col_map["data_height"]])
 
         peak = Peak(
             assignment=assignment,
