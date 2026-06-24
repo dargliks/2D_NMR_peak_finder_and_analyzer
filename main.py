@@ -5,6 +5,7 @@ Loads the spectrum and peak list, allows the user to adjust alignment
 parameters, runs the alignment, and writes the output files.
 """
 
+import os
 from dataclasses import replace
 
 from alignment.alignment_engine import align_peak
@@ -173,18 +174,6 @@ def main():
         elif result.status == "FAILED_TO_CONVERGE":
             failed += 1
     
-    # Detect collisions
-    detect_collisions(results)
-
-    collision_count = 0
-    for result in results:
-        if result.collision_with:
-            collision_count += 1
-
-    # Write output files
-    write_sparky(results, "outputs/aligned_peaks.list")
-    write_report(results, "outputs/alignment_report.csv")
-
     print("Alignment complete.")
     print()
     print(f"{len(results)} peaks processed.")
@@ -193,8 +182,23 @@ def main():
     print(f"CONVERGED:            {converged}")
     print(f"LOW_SIGNAL:           {low}")
     print(f"FAILED_TO_CONVERGE:   {failed}")
+    
+    # Detect collisions
+    detect_collisions(results)
+
+    collision_count = 0
+    for result in results:
+        if result.collision_with:
+            collision_count += 1
+
     print()
     print(f"{collision_count} peaks involved in collisions.")
+
+    # Write output files
+    os.makedirs("outputs", exist_ok=True)
+    write_sparky(results, "outputs/aligned_peaks.list")
+    write_report(results, "outputs/alignment_report.csv")
+
     print()
     print("Output files written to outputs/.")
 

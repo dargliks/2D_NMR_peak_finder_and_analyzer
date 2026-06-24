@@ -52,11 +52,6 @@ def load_peaks(file_path: str) -> list[Peak]:
         if col_map is None:
             continue
 
-
-        assignment = parts[col_map["assignment"]]
-        w1 = float(parts[col_map["w1"]])
-        w2 = float(parts[col_map["w2"]])
-
         volume = None
         data_height = None
 
@@ -73,6 +68,10 @@ def load_peaks(file_path: str) -> list[Peak]:
             data_height = float(parts[col_map["data_height"] - 1]) if "data_height" in col_map else None
         else:
             continue
+
+        assignment = parts[col_map["assignment"]]
+        w1 = float(parts[col_map["w1"]])
+        w2 = float(parts[col_map["w2"]])
 
         peak = Peak(
             assignment=assignment,
