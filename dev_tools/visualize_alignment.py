@@ -1,7 +1,9 @@
+"""
+visualize a peak alignment result and its search window.
+"""
+
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
-# from spectrum import Spectrum
-# from peak import Peak
 
 def visualize_alignment(
     spectrum,
@@ -31,8 +33,8 @@ def visualize_alignment(
         origin="lower",
     )
 
-    ax.set_xlabel("1H (ppm)")
-    ax.set_ylabel("15N (ppm)")
+    ax.set_xlabel(f"{spectrum.w2_nucleus} (ppm)")
+    ax.set_ylabel(f"{spectrum.w1_nucleus} (ppm)")
     ax.set_title(original_peak.assignment)
 
     left = original_peak.w2 - alignment_config.radius_w2

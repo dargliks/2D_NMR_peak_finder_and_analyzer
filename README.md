@@ -1,63 +1,99 @@
 # 2D_NMR_peak_finder_and_analyzer
 
-In protein NMR spectroscopy, our measurement data is usually a two-dimentional spectrum of frequencies, where the "peaks" in the spectrum correlate to the individual amino acids of the protein. Even after the initail assignment of each peak to its corresponding amino acid in the protein's sequence, even minute changes to the chemical environment (such as tiny fluctuations in temperature, pH level, salt concentration and other factors) or to the magnetic field of the experiment can affect the location of the peaks on the spectrum in each individual experiment. While large changes to the peaks' location ("chemical shift perturbations") or to their intensity (usually the integrated volume of the peak) are scientifically used to learn about the protein's structural dynamics in and its interactions with small molecules or other proteins, small changes can occur as part of normal experiment error. 
+In protein NMR spectroscopy, spectra contain peaks corresponding to individual amino acids. Even after the initial assignment of each peak to its corresponding amino acid in the protein's sequence, small changes in the experimental conditions (such as tiny fluctuations in temperature, pH, salt concentration, magnetic field stability and others) can affect the positions of peaks in the spectrum in each individual experiment. While large changes to the peaks' positions ("chemical shift perturbations") or to their intensity are scientifically used to learn about the protein's structural dynamics and its interactions with small molecules or other proteins, small changes can occur as part of normal experiment error. 
 
-Therefore, every analysis of protein NMR data currently begins with adjusting the assigned peak list to align with the centers of the peaks in each individual experiment's spectrum and integrating the volume under them, prior to being able to compare the spectra and analyze the differences caused by our intended experimental variables. This is currently done manually, mostly peak-by-peak, and can take several hours for each spectrum. This tool is meant to automate as much of this process as possible, while flagging larger changes or discrepancies that require a human discretion. 
+Before spectra can be compared quantitatively, assigned peak lists must therefore be realigned to the observed peak positions in each spectrum. This process is often performed manually and can take hours for a single dataset.
 
-## 1. what does this project do?
+This project automates that alignment process for 2D NMR spectra by refining peak positions within a configurable search radius, reporting alignment status, and identifying potential peak assignment collisions. The program also identifies cases where multiple assignments converge to the same spectral region, flagging potentially ambiguous assignments for manual review.
 
-This project takes a 2D protein NMR spectrum and finds all the maximum points that are higher than a defined threshold (peaks). It then compares this list of peaks to the assigned peak list for the given protein, and will generate a new peak list in which the name of each peak from the assigned list is given to the spectrum peak that has the smallest distance from it. The system will flag for human discretion any peaks that are moved more than a determined threshold in this process, as well as possible cases where two assignments are moved to the same peak in the spectrum. 
+## 1. What does this project do?
 
-After aligning the assigned peaks to the spectrum, the project will integrate the volume under each peak and add the volume, as well as the peak height, to the peak list data. It can then run calculations comparing two such lists either in the locations of the peaks ("chemical shift perturbations") or in their relative intensity (calculated from peaks volume and/or height). 
+This project takes an existing assigned peak list for a given protein and compares it to an experimental 2D NMR spectrum of the same protein. Using a limited search window and an iterative refinement algorithm, it aligns each peak to the highest-intensity point within a local region of the spectrum.
 
-## 2. input and output data
+It returns an updated list of aligned peaks together with a status report that flags cases requiring user review, including peaks below an intensity threshold and peaks where the alignment failed to converge within the maximum number of iterations.
 
-### expected inputs
+The program also checks for collisions, where multiple assigned peaks converge to the same spectral region, and flags these cases for manual inspection.
 
-This project will require two main inputs:
+## 2. Input and output data
 
-1. a 2D protein NMR spectrum - in the format of either Bruker, NMRPipe or Sparky.
+### Inputs
 
-2. a text file containing a peak list - most likely in Sparky's list format, though other formats may be accepted as well. 
+This project currently accepts two input files:
 
-The project may also require some manual input of parameters such as the acceptable thresholds for peak selection and for acceptable shift distance. 
+1. a 2D protein NMR spectrum - in UCSF format
 
-### expected outputs
+2. a SPARKY-generated text file containing a peak list
 
-The primary output expected is a text file containing the new adjusted and integrated peak list - most likely in Sparky's list format. 
+Further optional inputs allow the user to adjust the default spectrum and alignment configurations, including applying a global PPM shift, adjust the permitted search radius/window and number of iterations for the alignment algorithm, and determine the accepted peak intensity threshold. 
 
-Further outputs may include CSV files containing the results of calculated comparisons between spectra, and PNG files plotting these calculations to the protein sequence. 
+### outputs
 
-## 3. how to run this project?
+The project returns two outputs:
 
-### install this project
+1. a SPARKY-compatible peak list file, containing the aligned positions of the peaks (peaks that failed to converge retain their original position, for user review).
+
+2. a CSV report file, containing for each peak: 
+
+    * its original and aligned positions,
+
+    * a status indicating whether the peak:
+        * converged successfully (CONVERGED)
+        * converged but is below intensity threshold (LOW_SIGNAL)
+        * failed to converge within the maximum number of iterations (FAILED_TO_CONVERGE)
+    
+    * a list of peaks occupying the same spectral region as it (collisions), where applicable
+
+## 3. Project installation and usage
+
+### Project installation
 
 To install the project, clone this repository: https://github.com/dargliks/2D_NMR_peak_finder_and_analyzer.git
 
-### install dependencies 
+### Project dependencies
+
+This project requires Python 3.10+, as well as the following packages:
+
+* nmrglue
+* numpy
+* matplotlib (optional, used in dev_tools only)
 
 You can install the required dependencies using:
 
     pip install -r requirements.txt
 
-This project requires the following packages to run:
-
-* nmrglue
-* numpy
-* scipy
-* matplotlib
-* PANDAS
 
 ### run tests
 
-The project will include automated tests for core logic. run them with
+The project includes a total of 30 automated tests for core logic. run them with
     pytest tests\
 
 ### run the project
 
 run this project using
-    python PeakFinder_main.py
+    python main.py
 
-## 4. course information
+## 4. Future Improvements
+
+1. Multiple file format support - including bruker and NMRPipe spectrum files, and potentially additional peak list formats.
+
+2. Improved alignment algorithm - allowing for candidate selection and scoring to identify larger shift in peak positions, rather than local refinement only.
+
+3. Improved configuration settings:
+    * Adjustment of default settings to further experiment types.
+    * SNR-based, spectrum-specific intensity threshold determination.
+
+4. Post-alignment analysis tools: 
+    * peak volume integration. 
+    * list comparison analyses, including chemical shift perturbations and intensity changes
+
+5. Interactive GUI 
+
+## 5. AI usage disclosure
+
+Parts of the software design, implementation, testing, debugging, and documentation were developed with assistance from OpenAI ChatGPT. All final code, design decisions, and  scientific validation were performed or reviewed by the project author.
+
+## 6. course information
 
 This project was written as part of the [WIS python programming course](https://github.com/Code-Maven/wis-python-course-2026-03/)
+
+

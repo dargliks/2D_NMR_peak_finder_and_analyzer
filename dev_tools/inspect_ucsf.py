@@ -3,7 +3,8 @@ import nmrglue as ng
 
 def main():
 
-    dic, data = ng.sparky.read("example_spectrum.ucsf")
+    filename = input("UCSF file: ")
+    dic, data = ng.sparky.read(filename)
     uc_w1 = ng.sparky.make_uc(dic, data, dim=0)
     uc_w2 = ng.sparky.make_uc(dic, data, dim=1)
 
