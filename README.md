@@ -64,12 +64,14 @@ You can install the required dependencies using:
 
 ### run tests
 
-The project includes a total of 30 automated tests for core logic. run them with
+The project includes a total of 30 automated tests for core logic. run them with:
+
     pytest tests\
 
 ### run the project
 
-run this project using
+run this project using:
+
     python main.py
 
 ## 4. Future Improvements
@@ -86,7 +88,7 @@ run this project using
     * peak volume integration. 
     * list comparison analyses, including chemical shift perturbations and intensity changes
 
-5. Interactive GUI 
+5. Interactive GUI. 
 
 ## 5. AI usage disclosure
 
