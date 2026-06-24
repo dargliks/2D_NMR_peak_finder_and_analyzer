@@ -74,7 +74,7 @@ run this project using:
 
     python main.py
 
-## 4. Future Improvements
+## 4. Future improvements
 
 1. Multiple file format support - including bruker and NMRPipe spectrum files, and potentially additional peak list formats.
 
